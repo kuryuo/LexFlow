@@ -1,13 +1,12 @@
-import './App.css'
+import { Button } from '@/components/ui/button'
 
 function App() {
   return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-100">
-        <h1 className="text-4xl font-bold text-blue-600">
-          LexFlow
-        </h1>
-      </div>
-  );
+    <div className='flex min-h-screen flex-col items-center justify-center gap-4 bg-background'>
+      <h1 className='text-4xl font-bold text-foreground'>LexFlow</h1>
+      <Button>Get started</Button>
+    </div>
+  )
 }
 
-export default App;
+export default App
