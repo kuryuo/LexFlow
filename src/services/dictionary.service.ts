@@ -1,24 +1,5 @@
 import { supabase } from '@/lib/supabase'
-
-export const CEFR_LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1'] as const
-
-export type CefrLevel = (typeof CEFR_LEVELS)[number]
-
-export interface DictionaryMeaning {
-  id: number
-  partOfSpeech: string
-  translations: string[]
-}
-
-export interface DictionaryWord {
-  id: string
-  word: string
-  senseHint: string | null
-  level: CefrLevel
-  source: string
-  transcription: string
-  meanings: DictionaryMeaning[]
-}
+import type { CefrLevel, DictionaryWord } from '@/types'
 
 interface DictionaryWordRow {
   id: string
