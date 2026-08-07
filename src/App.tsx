@@ -1,9 +1,11 @@
 import { Flashcard } from './components/flashcards/Flashcard'
 import { LevelStatsCard } from './components/stats/LevelStatsCard'
+import { AuthPage } from './pages/AuthPage'
 
 function App() {
   return (
     <>
+      <AuthPage />
       <LevelStatsCard
         stats={{
           level: 'A1',
