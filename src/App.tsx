@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { Flashcard } from './components/flashcards/Flashcard'
+import { StudySession } from './components/flashcards/StudySession'
 import { LevelStatsCard } from './components/stats/LevelStatsCard'
 import { Button } from './components/ui/button'
 import { supabase } from './lib/supabase'
@@ -58,7 +58,7 @@ function App() {
               totalCount: 190,
             }}
           />
-          <Flashcard level='A2' front='привет' back='hi' transcription='hai:' />
+          <StudySession />
         </>
       ) : (
         <AuthPage />
