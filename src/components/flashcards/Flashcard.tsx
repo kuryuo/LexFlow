@@ -9,6 +9,9 @@ interface FlashcardProps {
   front: string
   back: string
   transcription: string
+  isDisabled: boolean
+  onKnow: () => void
+  onUnknown: () => void
 }
 
 export const Flashcard = ({
@@ -16,8 +19,16 @@ export const Flashcard = ({
   front,
   back,
   transcription,
+  onKnow,
+  onUnknown,
+  isDisabled,
 }: FlashcardProps) => {
   const [isFlipped, setIsFlipped] = useState(false)
+
+  function handleAnswer(onAnswer: () => void) {
+    setIsFlipped(false)
+    onAnswer()
+  }
 
   function handleClick() {
     setIsFlipped((prev) => !prev)
@@ -35,7 +46,14 @@ export const Flashcard = ({
           <Badge className='absolute top-4 left-4' variant='secondary'>
             {level}
           </Badge>
-          <p className='text-3xl font-semibold'>{front}</p>
+          <div
+            className={`text-center transition-opacity duration-150 ${
+              isDisabled ? 'opacity-0' : 'opacity-100'
+            }`}
+          >
+            <p className='text-3xl font-semibold'>{front}</p>
+            <p className='text-muted-foreground'>{transcription}</p>
+          </div>
         </Card>
 
         <Card className='absolute inset-0 backface-hidden flex rotate-y-180 flex-col items-center justify-center'>
@@ -44,13 +62,27 @@ export const Flashcard = ({
           </Badge>
           <div className='text-center'>
             <p className='text-3xl font-semibold'>{back}</p>
-            <p className='text-muted-foreground'>{transcription}</p>
           </div>
           <div className='absolute bottom-4 flex gap-2'>
-            <Button variant='outline' onClick={(e) => e.stopPropagation()}>
+            <Button
+              disabled={isDisabled}
+              variant='outline'
+              onClick={(event) => {
+                event.stopPropagation()
+                handleAnswer(onUnknown)
+              }}
+            >
               Не знаю
             </Button>
-            <Button onClick={(e) => e.stopPropagation()}>Знаю</Button>
+            <Button
+              disabled={isDisabled}
+              onClick={(event) => {
+                event.stopPropagation()
+                handleAnswer(onKnow)
+              }}
+            >
+              Знаю
+            </Button>
           </div>
         </Card>
       </div>

@@ -8,14 +8,17 @@ import { Skeleton } from '../ui/skeleton'
 import { Flashcard } from './Flashcard'
 
 export function StudySession() {
-  const { words, currentIndex, isLoading, error, loadWords } = useStudyStore()
+  const {
+    words,
+    currentIndex,
+    isLoading,
+    error,
+    loadWords,
+    submitAnswer,
+    isSubmitting,
+  } = useStudyStore()
 
   const currentWord = words[currentIndex]
-
-  const translation =
-    currentWord.meanings
-      .flatMap((meaning) => meaning.translations)
-      .join(', ') || 'Перевод отсутствует'
 
   useEffect(() => {
     void loadWords('A1')
@@ -38,12 +41,20 @@ export function StudySession() {
     return <p>Слова не найдены</p>
   }
 
+  const translation =
+    currentWord.meanings
+      .flatMap((meaning) => meaning.translations)
+      .join(', ') || 'Перевод отсутствует'
+
   return (
     <Flashcard
       level={currentWord.level}
       front={currentWord.word}
       transcription={currentWord.transcription}
       back={translation}
+      onKnow={() => void submitAnswer({ knew: true })}
+      onUnknown={() => void submitAnswer({ knew: false })}
+      isDisabled={isSubmitting}
     />
   )
 }
