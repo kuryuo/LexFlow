@@ -1,10 +1,9 @@
 import { useEffect } from 'react'
 
-import { StudySession } from './components/flashcards/StudySession'
-import { LevelStatsCard } from './components/stats/LevelStatsCard'
 import { Button } from './components/ui/button'
 import { supabase } from './lib/supabase'
 import { AuthPage } from './pages/AuthPage'
+import { StudyPage } from './pages/StudyPage'
 import { getSession, signOut } from './services/auth.service'
 import { useAuthStore } from './store/auth.store'
 
@@ -49,16 +48,7 @@ function App() {
               Выйти
             </Button>
           </div>
-          <LevelStatsCard
-            stats={{
-              level: 'A1',
-              newCount: 120,
-              learningCount: 40,
-              knownCount: 30,
-              totalCount: 190,
-            }}
-          />
-          <StudySession />
+          <StudyPage />
         </>
       ) : (
         <AuthPage />

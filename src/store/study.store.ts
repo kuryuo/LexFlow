@@ -2,7 +2,7 @@ import { create } from 'zustand'
 
 import { getDictionaryWords } from '@/services/dictionary.service'
 import { answerWord } from '@/services/progress.service'
-import type { CefrLevel, DictionaryWord } from '@/types'
+import type { CefrLevel, DictionaryWord, WordCount } from '@/types'
 
 interface SubmitAnswerParams {
   knew: boolean
@@ -12,7 +12,7 @@ interface StudyState {
   words: DictionaryWord[]
   currentIndex: number
   isLoading: boolean
-  loadWords: (level: CefrLevel) => Promise<void>
+  loadWords: (level: CefrLevel, count: WordCount) => Promise<void>
   submitAnswer: ({ knew }: SubmitAnswerParams) => Promise<void>
   error: string | null
   isSubmitting: boolean
@@ -23,11 +23,11 @@ export const useStudyStore = create<StudyState>((set, get) => ({
   currentIndex: 0,
   isLoading: false,
   isSubmitting: false,
-  loadWords: async (level) => {
+  loadWords: async (level, count) => {
     set({ isLoading: true, error: null })
 
     try {
-      const result = await getDictionaryWords({ level })
+      const result = await getDictionaryWords({ level, pageSize: count })
       set({
         words: result.words,
         currentIndex: 0,

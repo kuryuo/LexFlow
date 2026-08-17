@@ -1,8 +1,11 @@
 export const CEFR_LEVELS = ['A1', 'A2', 'B1', 'B2', 'C1'] as const
+export type CefrLevel = (typeof CEFR_LEVELS)[number]
 
 export const WORD_STATUSES = ['learning', 'known'] as const
-
 export type WordStatus = (typeof WORD_STATUSES)[number]
+
+export const WORD_COUNTS = [10, 20, 30, 50] as const
+export type WordCount = (typeof WORD_COUNTS)[number]
 
 export interface UserWordProgress {
   id: string
@@ -13,8 +16,6 @@ export interface UserWordProgress {
   updatedAt: string
   createdAt: string
 }
-
-export type CefrLevel = (typeof CEFR_LEVELS)[number]
 
 export interface DictionaryMeaning {
   id: number

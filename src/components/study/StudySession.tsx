@@ -1,28 +1,34 @@
 import { useEffect } from 'react'
 
 import { useStudyStore } from '@/store/study.store'
+import type { CefrLevel, WordCount } from '@/types'
 
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert'
 import { Skeleton } from '../ui/skeleton'
 
 import { Flashcard } from './Flashcard'
 
-export function StudySession() {
+interface StudySessionProps {
+  wordCount: WordCount
+  wordLevel: CefrLevel
+}
+
+export const StudySession = ({ wordCount, wordLevel }: StudySessionProps) => {
   const {
     words,
     currentIndex,
     isLoading,
     error,
-    loadWords,
     submitAnswer,
     isSubmitting,
+    loadWords,
   } = useStudyStore()
 
   const currentWord = words[currentIndex]
 
   useEffect(() => {
-    void loadWords('A1')
-  }, [loadWords])
+    void loadWords(wordLevel, wordCount)
+  }, [])
 
   if (isLoading) {
     return <Skeleton className='h-64 w-full max-w-sm' />
@@ -55,6 +61,8 @@ export function StudySession() {
       onKnow={() => void submitAnswer({ knew: true })}
       onUnknown={() => void submitAnswer({ knew: false })}
       isDisabled={isSubmitting}
+      current={currentIndex}
+      total={wordCount}
     />
   )
 }

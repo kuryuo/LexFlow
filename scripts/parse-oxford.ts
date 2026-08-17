@@ -4,6 +4,8 @@ import { fileURLToPath } from 'node:url'
 import { PDFParse } from 'pdf-parse'
 
 type CefrLevel = 'A1' | 'A2' | 'B1' | 'B2' | 'C1'
+const LEVELS = new Set<CefrLevel>(['A1', 'A2', 'B1', 'B2', 'C1'])
+
 type Source = 'oxford_3000' | 'oxford_5000'
 
 interface RawWord {
@@ -12,8 +14,6 @@ interface RawWord {
   level: CefrLevel
   source: Source
 }
-
-const LEVELS = new Set<CefrLevel>(['A1', 'A2', 'B1', 'B2', 'C1'])
 
 const POS_TOKENS = [
   'indefinite article',
