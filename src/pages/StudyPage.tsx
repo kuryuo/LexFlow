@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import { StatsOverview } from '@/components/stats/StatsOverview'
 import { LevelSelector } from '@/components/study/LevelSelector'
 import { StudySession } from '@/components/study/StudySession'
 import { WordCountSelector } from '@/components/study/WordCountSelector'
@@ -34,6 +35,8 @@ export function StudyPage() {
                 />
               </CardContent>
             </Card>
+
+            {selectedLevel && <StatsOverview selectedLevel={selectedLevel} />}
 
             <Card className='w-full py-8'>
               <CardHeader className='items-center text-center'>

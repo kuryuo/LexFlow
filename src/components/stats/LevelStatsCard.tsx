@@ -13,7 +13,7 @@ interface LevelStatsCardProps {
 export const LevelStatsCard = ({ stats }: LevelStatsCardProps) => {
   const { level, newCount, learningCount, knownCount, totalCount } = stats
   const knownPercent =
-    totalCount === 0 ? 0 : Math.round((knownCount / totalCount) * 100)
+    totalCount === 0 ? 0 : Number(((knownCount / totalCount) * 100).toFixed(3))
 
   return (
     <Card className='gap-4 p-5'>
