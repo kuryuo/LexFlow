@@ -1,5 +1,11 @@
 import { supabase } from '@/lib/supabase'
-import type { CefrLevel, DictionaryWord } from '@/types'
+import type {
+  CefrLevel,
+  DictionaryWord,
+  StudyCandidate,
+  UserWordProgress,
+  WordStatus,
+} from '@/types'
 
 interface DictionaryWordRow {
   id: string
@@ -15,6 +21,16 @@ interface DictionaryWordRow {
   }>
 }
 
+interface ProgressRow {
+  id: string
+  user_id: string
+  word_id: string
+  status: WordStatus
+  correct_count: number
+  updated_at: string
+  created_at: string
+}
+
 interface GetDictionaryWordsParams {
   level: CefrLevel
   page?: number
@@ -24,6 +40,34 @@ interface GetDictionaryWordsParams {
 interface GetDictionaryWordsResult {
   words: DictionaryWord[]
   total: number
+}
+
+function mapWord(row: DictionaryWordRow): DictionaryWord {
+  return {
+    id: row.id,
+    word: row.word,
+    senseHint: row.sense_hint,
+    level: row.level,
+    source: row.source,
+    transcription: row.transcription,
+    meanings: row.word_meanings.map((meaning) => ({
+      id: meaning.id,
+      partOfSpeech: meaning.part_of_speech,
+      translations: meaning.translation_values,
+    })),
+  }
+}
+
+function mapProgress(row: ProgressRow): UserWordProgress {
+  return {
+    id: row.id,
+    userId: row.user_id,
+    wordId: row.word_id,
+    status: row.status,
+    correctCount: row.correct_count,
+    updatedAt: row.updated_at,
+    createdAt: row.created_at,
+  }
 }
 
 export async function getDictionaryWords({
@@ -63,19 +107,76 @@ export async function getDictionaryWords({
   const rows = (data ?? []) as DictionaryWordRow[]
 
   return {
-    words: rows.map((row) => ({
-      id: row.id,
-      word: row.word,
-      senseHint: row.sense_hint,
-      level: row.level,
-      source: row.source,
-      transcription: row.transcription,
-      meanings: row.word_meanings.map((meaning) => ({
-        id: meaning.id,
-        partOfSpeech: meaning.part_of_speech,
-        translations: meaning.translation_values,
-      })),
-    })),
+    words: rows.map(mapWord),
     total: count ?? 0,
   }
+}
+
+export async function getStudyCandidates(
+  level: CefrLevel,
+): Promise<StudyCandidate[]> {
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser()
+
+  if (userError || !user) {
+    throw new Error(
+      `Не удалось определить пользователя: ${userError?.message ?? 'нет сессии'}`,
+    )
+  }
+
+  const { data: wordsData, error: wordsError } = await supabase
+    .from('dictionary_words')
+    .select(
+      `
+        id,
+        word,
+        sense_hint,
+        level,
+        source,
+        transcription,
+        word_meanings (
+          id,
+          part_of_speech,
+          translation_values
+        )
+      `,
+    )
+    .eq('level', level)
+
+  if (wordsError) {
+    throw new Error(`Не удалось получить слова: ${wordsError.message}`)
+  }
+
+  const wordRows = (wordsData ?? []) as DictionaryWordRow[]
+  const wordIds = wordRows.map((row) => row.id)
+
+  if (wordIds.length === 0) {
+    return []
+  }
+
+  const { data: progressData, error: progressError } = await supabase
+    .from('user_word_progress')
+    .select(
+      'id, user_id, word_id, status, correct_count, updated_at, created_at',
+    )
+    .eq('user_id', user.id)
+    .in('word_id', wordIds)
+
+  if (progressError) {
+    throw new Error(`Не удалось получить прогресс: ${progressError.message}`)
+  }
+
+  const progressByWordId = new Map(
+    ((progressData ?? []) as ProgressRow[]).map((row) => [
+      row.word_id,
+      mapProgress(row),
+    ]),
+  )
+
+  return wordRows.map((row) => ({
+    word: mapWord(row),
+    progress: progressByWordId.get(row.id) ?? null,
+  }))
 }

@@ -7,6 +7,11 @@ export type WordStatus = (typeof WORD_STATUSES)[number]
 export const WORD_COUNTS = [10, 20, 30, 50] as const
 export type WordCount = (typeof WORD_COUNTS)[number]
 
+export interface StudyCandidate {
+  word: DictionaryWord
+  progress: UserWordProgress | null
+}
+
 export interface UserWordProgress {
   id: string
   userId: string

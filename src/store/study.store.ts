@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 
-import { getDictionaryWords } from '@/services/dictionary.service'
+import { pickSessionWords } from '@/lib/study-weight'
+import { getStudyCandidates } from '@/services/dictionary.service'
 import { answerWord } from '@/services/progress.service'
 import type { CefrLevel, DictionaryWord, WordCount } from '@/types'
 
@@ -30,9 +31,11 @@ export const useStudyStore = create<StudyState>((set, get) => ({
     set({ isLoading: true, error: null })
 
     try {
-      const result = await getDictionaryWords({ level, pageSize: count })
+      const candidates = await getStudyCandidates(level)
+      const words = pickSessionWords(candidates, count)
+
       set({
-        words: result.words,
+        words,
         currentIndex: 0,
         correctCount: 0,
       })
