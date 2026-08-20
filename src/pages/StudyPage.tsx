@@ -16,7 +16,11 @@ export function StudyPage() {
     <div className='flex min-h-[calc(100vh-4.5rem)] justify-center px-6 py-16'>
       <div className='flex w-full max-w-2xl flex-col items-center gap-8'>
         {hasStarted && selectedLevel && selectedCount ? (
-          <StudySession wordCount={selectedCount} wordLevel={selectedLevel} />
+          <StudySession
+            wordCount={selectedCount}
+            wordLevel={selectedLevel}
+            onBack={() => setHasStarted(false)}
+          />
         ) : (
           <>
             <Card className='w-full py-8'>

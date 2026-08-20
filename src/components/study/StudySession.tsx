@@ -7,20 +7,27 @@ import { Alert, AlertDescription, AlertTitle } from '../ui/alert'
 import { Skeleton } from '../ui/skeleton'
 
 import { Flashcard } from './Flashcard'
+import { StudySessionResults } from './StudySessionResults'
 
 interface StudySessionProps {
   wordCount: WordCount
   wordLevel: CefrLevel
+  onBack: () => void
 }
 
-export const StudySession = ({ wordCount, wordLevel }: StudySessionProps) => {
+export const StudySession = ({
+  wordCount,
+  wordLevel,
+  onBack,
+}: StudySessionProps) => {
   const {
     words,
     currentIndex,
     isLoading,
     error,
-    submitAnswer,
     isSubmitting,
+    correctCount,
+    submitAnswer,
     loadWords,
   } = useStudyStore()
 
@@ -40,6 +47,18 @@ export const StudySession = ({ wordCount, wordLevel }: StudySessionProps) => {
         <AlertTitle>Не удалось загрузить слова</AlertTitle>
         <AlertDescription>{error}</AlertDescription>
       </Alert>
+    )
+  }
+
+  if (currentIndex >= words.length) {
+    return (
+      <StudySessionResults
+        level={wordLevel}
+        correctCount={correctCount}
+        total={wordCount}
+        onRetry={() => void loadWords(wordLevel, wordCount)}
+        onBack={onBack}
+      />
     )
   }
 
