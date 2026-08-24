@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 
 import { useStatsStore } from '@/store/stats.store'
-import type { CefrLevel } from '@/types'
+import type { StudyLevel } from '@/types'
 
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert'
 import { Skeleton } from '../ui/skeleton'
@@ -9,7 +9,7 @@ import { Skeleton } from '../ui/skeleton'
 import { LevelStatsCard } from './LevelStatsCard'
 
 interface StatsOverviewState {
-  selectedLevel: CefrLevel
+  selectedLevel: StudyLevel
 }
 
 export const StatsOverview = ({ selectedLevel }: StatsOverviewState) => {

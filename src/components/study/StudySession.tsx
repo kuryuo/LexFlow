@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 
 import { useStudyStore } from '@/store/study.store'
-import type { CefrLevel, WordCount } from '@/types'
+import type { StudyLevel, WordCount } from '@/types'
 
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert'
 import { Skeleton } from '../ui/skeleton'
@@ -11,7 +11,7 @@ import { StudySessionResults } from './StudySessionResults'
 
 interface StudySessionProps {
   wordCount: WordCount
-  wordLevel: CefrLevel
+  wordLevel: StudyLevel
   onBack: () => void
 }
 

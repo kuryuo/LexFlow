@@ -1,13 +1,13 @@
 import { create } from 'zustand'
 
 import { getLevelStats } from '@/services/progress.service'
-import type { CefrLevel, LevelStats } from '@/types'
+import type { LevelStats, StudyLevel } from '@/types'
 
 interface StatsState {
   stats: LevelStats | null
   isLoading: boolean
   error: string | null
-  loadStats: (level: CefrLevel) => Promise<void>
+  loadStats: (level: StudyLevel) => Promise<void>
 }
 
 export const useStatsStore = create<StatsState>((set) => ({

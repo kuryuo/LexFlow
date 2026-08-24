@@ -1,12 +1,12 @@
 import { supabase } from '@/lib/supabase'
-import type { CefrLevel, LevelStats } from '@/types'
+import type { LevelStats, StudyLevel } from '@/types'
 
 interface AnswerWordParams {
   wordId: string
   knew: boolean
 }
 
-export async function getLevelStats(level: CefrLevel): Promise<LevelStats> {
+export async function getLevelStats(level: StudyLevel): Promise<LevelStats> {
   const {
     data: { user },
     error,
@@ -18,10 +18,15 @@ export async function getLevelStats(level: CefrLevel): Promise<LevelStats> {
     )
   }
 
-  const { count: totalCount, error: totalError } = await supabase
+  let totalQuery = supabase
     .from('dictionary_words')
     .select('*', { count: 'exact', head: true })
-    .eq('level', level)
+
+  if (level !== 'all') {
+    totalQuery = totalQuery.eq('level', level)
+  }
+
+  const { count: totalCount, error: totalError } = await totalQuery
 
   if (totalError) {
     throw new Error(
@@ -29,11 +34,16 @@ export async function getLevelStats(level: CefrLevel): Promise<LevelStats> {
     )
   }
 
-  const { data: progressRows, error: progressError } = await supabase
+  let progressQuery = supabase
     .from('user_word_progress')
     .select('status, dictionary_words!inner(level)')
     .eq('user_id', user.id)
-    .eq('dictionary_words.level', level)
+
+  if (level !== 'all') {
+    progressQuery = progressQuery.eq('dictionary_words.level', level)
+  }
+
+  const { data: progressRows, error: progressError } = await progressQuery
 
   if (progressError) {
     throw new Error(

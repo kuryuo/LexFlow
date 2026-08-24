@@ -3,6 +3,7 @@ import type {
   CefrLevel,
   DictionaryWord,
   StudyCandidate,
+  StudyLevel,
   UserWordProgress,
   WordStatus,
 } from '@/types'
@@ -32,7 +33,7 @@ interface ProgressRow {
 }
 
 interface GetDictionaryWordsParams {
-  level: CefrLevel
+  level: StudyLevel
   page?: number
   pageSize?: number
 }
@@ -78,10 +79,8 @@ export async function getDictionaryWords({
   const from = (page - 1) * pageSize
   const to = from + pageSize - 1
 
-  const { data, count, error } = await supabase
-    .from('dictionary_words')
-    .select(
-      `
+  let query = supabase.from('dictionary_words').select(
+    `
         id,
         word,
         sense_hint,
@@ -94,11 +93,14 @@ export async function getDictionaryWords({
           translation_values
         )
       `,
-      { count: 'exact' },
-    )
-    .eq('level', level)
-    .order('word')
-    .range(from, to)
+    { count: 'exact' },
+  )
+
+  if (level !== 'all') {
+    query = query.eq('level', level)
+  }
+
+  const { data, count, error } = await query.order('word').range(from, to)
 
   if (error) {
     throw new Error(`Не удалось получить словарь: ${error.message}`)
@@ -113,7 +115,7 @@ export async function getDictionaryWords({
 }
 
 export async function getStudyCandidates(
-  level: CefrLevel,
+  level: StudyLevel,
 ): Promise<StudyCandidate[]> {
   const {
     data: { user },

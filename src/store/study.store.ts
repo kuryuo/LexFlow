@@ -3,7 +3,7 @@ import { create } from 'zustand'
 import { pickSessionWords } from '@/lib/study-weight'
 import { getStudyCandidates } from '@/services/dictionary.service'
 import { answerWord } from '@/services/progress.service'
-import type { CefrLevel, DictionaryWord, WordCount } from '@/types'
+import type { DictionaryWord, StudyLevel, WordCount } from '@/types'
 
 interface SubmitAnswerParams {
   knew: boolean
@@ -16,7 +16,7 @@ interface StudyState {
   error: string | null
   isSubmitting: boolean
   correctCount: number
-  loadWords: (level: CefrLevel, count: WordCount) => Promise<void>
+  loadWords: (level: StudyLevel, count: WordCount) => Promise<void>
   submitAnswer: ({ knew }: SubmitAnswerParams) => Promise<void>
 }
 

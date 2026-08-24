@@ -1,10 +1,10 @@
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import type { CefrLevel } from '@/types'
+import type { StudyLevel } from '@/types'
 
 interface StudySessionResultsProps {
-  level: CefrLevel
+  level: StudyLevel
   correctCount: number
   total: number
   onRetry: () => void

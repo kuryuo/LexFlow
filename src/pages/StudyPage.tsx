@@ -6,10 +6,10 @@ import { StudySession } from '@/components/study/StudySession'
 import { WordCountSelector } from '@/components/study/WordCountSelector'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import type { CefrLevel, WordCount } from '@/types'
+import type { StudyLevel, WordCount } from '@/types'
 
 export function StudyPage() {
-  const [selectedLevel, setSelectedLevel] = useState<CefrLevel | null>(null)
+  const [selectedLevel, setSelectedLevel] = useState<StudyLevel | null>(null)
   const [selectedCount, setSelectedCount] = useState<WordCount | null>(null)
   const [hasStarted, setHasStarted] = useState(false)
 
