@@ -35,7 +35,7 @@ export const StudySession = ({
 
   useEffect(() => {
     void loadWords(wordLevel, wordCount)
-  }, [])
+  }, [wordLevel, wordCount, loadWords])
 
   if (isLoading) {
     return <Skeleton className='h-64 w-full max-w-sm' />

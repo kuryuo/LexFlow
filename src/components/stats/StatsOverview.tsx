@@ -17,7 +17,7 @@ export const StatsOverview = ({ selectedLevel }: StatsOverviewState) => {
 
   useEffect(() => {
     void loadStats(selectedLevel)
-  }, [selectedLevel])
+  }, [selectedLevel, loadStats])
 
   if (isLoading) {
     return <Skeleton className='h-48 w-full' />

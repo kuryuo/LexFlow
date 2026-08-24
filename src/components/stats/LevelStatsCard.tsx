@@ -4,7 +4,10 @@ import type { LevelStats } from '@/types'
 
 import { Badge } from '../ui/badge'
 import { Card } from '../ui/card'
+import { Dialog, DialogTrigger } from '../ui/dialog'
 import { Progress, ProgressLabel, ProgressValue } from '../ui/progress'
+
+import { WordStatsDialog } from './WordStatsDialog'
 
 interface LevelStatsCardProps {
   stats: LevelStats
@@ -33,27 +36,38 @@ export const LevelStatsCard = ({ stats }: LevelStatsCardProps) => {
       </Progress>
 
       <div className='grid grid-cols-3 gap-3'>
-        <div className='flex flex-col items-center gap-1 rounded-xl bg-muted/50 p-3 text-center'>
-          <Sparkles className='size-4 text-muted-foreground' />
-          <span className='text-lg font-semibold tabular-nums'>{newCount}</span>
-          <span className='text-xs text-muted-foreground'>Новые</span>
-        </div>
+        <Dialog>
+          <DialogTrigger className='flex flex-col items-center gap-1 rounded-xl bg-muted/50 p-3 text-center transition-colors hover:bg-muted'>
+            <Sparkles className='size-4 text-muted-foreground' />
+            <span className='text-lg font-semibold tabular-nums'>
+              {newCount}
+            </span>
+            <span className='text-xs text-muted-foreground'>Новые</span>
+          </DialogTrigger>
+          <WordStatsDialog title='Новые' />
+        </Dialog>
 
-        <div className='flex flex-col items-center gap-1 rounded-xl bg-muted/50 p-3 text-center'>
-          <BookOpen className='size-4 text-muted-foreground' />
-          <span className='text-lg font-semibold tabular-nums'>
-            {learningCount}
-          </span>
-          <span className='text-xs text-muted-foreground'>Учу</span>
-        </div>
+        <Dialog>
+          <DialogTrigger className='flex flex-col items-center gap-1 rounded-xl bg-muted/50 p-3 text-center transition-colors hover:bg-muted'>
+            <BookOpen className='size-4 text-muted-foreground' />
+            <span className='text-lg font-semibold tabular-nums'>
+              {learningCount}
+            </span>
+            <span className='text-xs text-muted-foreground'>Учу</span>
+          </DialogTrigger>
+          <WordStatsDialog title='Учу' />
+        </Dialog>
 
-        <div className='flex flex-col items-center gap-1 rounded-xl bg-muted/50 p-3 text-center'>
-          <CheckCircle2 className='size-4 text-muted-foreground' />
-          <span className='text-lg font-semibold tabular-nums'>
-            {knownCount}
-          </span>
-          <span className='text-xs text-muted-foreground'>Знаю</span>
-        </div>
+        <Dialog>
+          <DialogTrigger className='flex flex-col items-center gap-1 rounded-xl bg-muted/50 p-3 text-center transition-colors hover:bg-muted'>
+            <CheckCircle2 className='size-4 text-muted-foreground' />
+            <span className='text-lg font-semibold tabular-nums'>
+              {knownCount}
+            </span>
+            <span className='text-xs text-muted-foreground'>Знаю</span>
+          </DialogTrigger>
+          <WordStatsDialog title='Знаю' />
+        </Dialog>
       </div>
     </Card>
   )
