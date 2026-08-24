@@ -9,7 +9,7 @@ import { useAuthStore } from './store/auth.store'
 
 function App() {
   const user = useAuthStore((s) => s.user)
-  const isLoading = useAuthStore((s) => s.isLoading)
+  const isLoading = useAuthStore((s) => s.isAuthLoading)
   const setUser = useAuthStore((s) => s.setUser)
   const setLoading = useAuthStore((s) => s.setLoading)
 

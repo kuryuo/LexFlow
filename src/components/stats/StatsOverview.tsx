@@ -13,21 +13,21 @@ interface StatsOverviewState {
 }
 
 export const StatsOverview = ({ selectedLevel }: StatsOverviewState) => {
-  const { stats, isLoading, error, loadStats } = useStatsStore()
+  const { stats, isStatsLoading, statsError, loadStats } = useStatsStore()
 
   useEffect(() => {
     void loadStats(selectedLevel)
   }, [selectedLevel, loadStats])
 
-  if (isLoading) {
+  if (isStatsLoading) {
     return <Skeleton className='h-48 w-full' />
   }
 
-  if (error) {
+  if (statsError) {
     return (
       <Alert variant='destructive'>
         <AlertTitle>Не удалось загрузить статистику</AlertTitle>
-        <AlertDescription>{error}</AlertDescription>
+        <AlertDescription>{statsError}</AlertDescription>
       </Alert>
     )
   }

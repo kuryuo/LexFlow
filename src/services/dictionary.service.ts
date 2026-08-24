@@ -128,24 +128,27 @@ export async function getStudyCandidates(
     )
   }
 
-  const { data: wordsData, error: wordsError } = await supabase
-    .from('dictionary_words')
-    .select(
-      `
+  let wordsQuery = supabase.from('dictionary_words').select(
+    `
+      id,
+      word,
+      sense_hint,
+      level,
+      source,
+      transcription,
+      word_meanings (
         id,
-        word,
-        sense_hint,
-        level,
-        source,
-        transcription,
-        word_meanings (
-          id,
-          part_of_speech,
-          translation_values
-        )
-      `,
-    )
-    .eq('level', level)
+        part_of_speech,
+        translation_values
+      )
+    `,
+  )
+
+  if (level !== 'all') {
+    wordsQuery = wordsQuery.eq('level', level)
+  }
+
+  const { data: wordsData, error: wordsError } = await wordsQuery
 
   if (wordsError) {
     throw new Error(`Не удалось получить слова: ${wordsError.message}`)

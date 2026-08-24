@@ -3,14 +3,14 @@ import { create } from 'zustand'
 
 interface AuthState {
   user: User | null
-  isLoading: boolean
+  isAuthLoading: boolean
   setUser: (user: User | null) => void
-  setLoading: (isLoading: boolean) => void
+  setLoading: (isAuthLoading: boolean) => void
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
-  isLoading: true,
+  isAuthLoading: true,
   setUser: (user) => set({ user }),
-  setLoading: (isLoading) => set({ isLoading }),
+  setLoading: (isAuthLoading) => set({ isAuthLoading }),
 }))

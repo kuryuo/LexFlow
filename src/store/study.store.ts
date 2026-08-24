@@ -12,8 +12,8 @@ interface SubmitAnswerParams {
 interface StudyState {
   words: DictionaryWord[]
   currentIndex: number
-  isLoading: boolean
-  error: string | null
+  isWordsLoading: boolean
+  wordsError: string | null
   isSubmitting: boolean
   correctCount: number
   loadWords: (level: StudyLevel, count: WordCount) => Promise<void>
@@ -23,12 +23,12 @@ interface StudyState {
 export const useStudyStore = create<StudyState>((set, get) => ({
   words: [],
   currentIndex: 0,
-  isLoading: false,
-  error: null,
+  isWordsLoading: false,
+  wordsError: null,
   isSubmitting: false,
   correctCount: 0,
   loadWords: async (level, count) => {
-    set({ isLoading: true, error: null })
+    set({ isWordsLoading: true, wordsError: null })
 
     try {
       const candidates = await getStudyCandidates(level)
@@ -41,10 +41,11 @@ export const useStudyStore = create<StudyState>((set, get) => ({
       })
     } catch (error) {
       set({
-        error: error instanceof Error ? error.message : 'Неизвестная ошибка',
+        wordsError:
+          error instanceof Error ? error.message : 'Неизвестная ошибка',
       })
     } finally {
-      set({ isLoading: false })
+      set({ isWordsLoading: false })
     }
   },
   submitAnswer: async ({ knew }) => {
@@ -55,7 +56,7 @@ export const useStudyStore = create<StudyState>((set, get) => ({
       return
     }
 
-    set({ error: null, isSubmitting: true })
+    set({ wordsError: null, isSubmitting: true })
 
     try {
       await answerWord({
@@ -69,7 +70,8 @@ export const useStudyStore = create<StudyState>((set, get) => ({
       })
     } catch (error) {
       set({
-        error: error instanceof Error ? error.message : 'Неизвестная ошибка',
+        wordsError:
+          error instanceof Error ? error.message : 'Неизвестная ошибка',
       })
     } finally {
       set({ isSubmitting: false })

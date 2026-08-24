@@ -1,31 +1,53 @@
 import { create } from 'zustand'
 
+import { getStudyCandidates } from '@/services/dictionary.service'
 import { getLevelStats } from '@/services/progress.service'
-import type { LevelStats, StudyLevel } from '@/types'
+import type { LevelStats, StudyCandidate, StudyLevel } from '@/types'
 
 interface StatsState {
   stats: LevelStats | null
-  isLoading: boolean
-  error: string | null
+  candidates: StudyCandidate[]
+  isStatsLoading: boolean
+  statsError: string | null
+  isCandidatesLoading: boolean
+  candidatesError: string | null
   loadStats: (level: StudyLevel) => Promise<void>
+  loadCandidates: (level: StudyLevel) => Promise<void>
 }
 
 export const useStatsStore = create<StatsState>((set) => ({
   stats: null,
-  isLoading: false,
-  error: null,
+  candidates: [],
+  isStatsLoading: false,
+  statsError: null,
+  isCandidatesLoading: false,
+  candidatesError: null,
   loadStats: async (level) => {
-    set({ isLoading: true, error: null })
+    set({ isStatsLoading: true, statsError: null })
 
     try {
-      const result = await getLevelStats(level)
-      set({ stats: result })
+      set({ stats: await getLevelStats(level) })
     } catch (error) {
       set({
-        error: error instanceof Error ? error.message : 'Неизвестная ошибка',
+        statsError:
+          error instanceof Error ? error.message : 'Неизвестная ошибка',
       })
     } finally {
-      set({ isLoading: false })
+      set({ isStatsLoading: false })
+    }
+  },
+  loadCandidates: async (level) => {
+    set({ isCandidatesLoading: true, candidatesError: null })
+
+    try {
+      set({ candidates: await getStudyCandidates(level) })
+    } catch (error) {
+      set({
+        candidatesError:
+          error instanceof Error ? error.message : 'Неизвестная ошибка',
+      })
+    } finally {
+      set({ isCandidatesLoading: false })
     }
   },
 }))

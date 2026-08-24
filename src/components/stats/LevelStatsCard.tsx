@@ -44,7 +44,7 @@ export const LevelStatsCard = ({ stats }: LevelStatsCardProps) => {
             </span>
             <span className='text-xs text-muted-foreground'>Новые</span>
           </DialogTrigger>
-          <WordStatsDialog title='Новые' />
+          <WordStatsDialog title='Новые' level={level} count={newCount} />
         </Dialog>
 
         <Dialog>
@@ -55,7 +55,7 @@ export const LevelStatsCard = ({ stats }: LevelStatsCardProps) => {
             </span>
             <span className='text-xs text-muted-foreground'>Учу</span>
           </DialogTrigger>
-          <WordStatsDialog title='Учу' />
+          <WordStatsDialog title='Учу' level={level} count={learningCount} />
         </Dialog>
 
         <Dialog>
@@ -66,7 +66,7 @@ export const LevelStatsCard = ({ stats }: LevelStatsCardProps) => {
             </span>
             <span className='text-xs text-muted-foreground'>Знаю</span>
           </DialogTrigger>
-          <WordStatsDialog title='Знаю' />
+          <WordStatsDialog title='Знаю' level={level} count={knownCount} />
         </Dialog>
       </div>
     </Card>

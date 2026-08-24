@@ -40,7 +40,7 @@ export interface DictionaryWord {
 }
 
 export interface LevelStats {
-  level: CefrLevel | 'all'
+  level: StudyLevel
   newCount: number
   learningCount: number
   knownCount: number

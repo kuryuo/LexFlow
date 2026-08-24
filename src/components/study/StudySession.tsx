@@ -23,8 +23,8 @@ export const StudySession = ({
   const {
     words,
     currentIndex,
-    isLoading,
-    error,
+    isWordsLoading,
+    wordsError,
     isSubmitting,
     correctCount,
     submitAnswer,
@@ -37,15 +37,15 @@ export const StudySession = ({
     void loadWords(wordLevel, wordCount)
   }, [wordLevel, wordCount, loadWords])
 
-  if (isLoading) {
+  if (isWordsLoading) {
     return <Skeleton className='h-64 w-full max-w-sm' />
   }
 
-  if (error) {
+  if (wordsError) {
     return (
       <Alert variant='destructive'>
         <AlertTitle>Не удалось загрузить слова</AlertTitle>
-        <AlertDescription>{error}</AlertDescription>
+        <AlertDescription>{wordsError}</AlertDescription>
       </Alert>
     )
   }

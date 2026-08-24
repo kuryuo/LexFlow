@@ -35,6 +35,7 @@ export function StudyPage() {
 
         <Dialog>
           <DialogTrigger
+            nativeButton={false}
             className='w-full'
             render={
               <Card className='w-full cursor-pointer py-6 transition-colors hover:bg-muted/40' />
